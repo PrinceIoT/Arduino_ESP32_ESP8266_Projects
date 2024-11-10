@@ -1,0 +1,27 @@
+const int zeroCrossingPin = 2;  // Digital pin for zero-crossing detection
+
+void setup() {
+  Serial.begin(9600);           // Initialize serial communication
+  pinMode(zeroCrossingPin, INPUT_PULLUP);  // Set the zero-crossing pin as INPUT_PULLUP
+  attachInterrupt(digitalPinToInterrupt(zeroCrossingPin), zeroCrossingInterrupt, FALLING);
+}
+
+void loop() {
+  // Your main loop code can go here
+}
+
+void zeroCrossingInterrupt() {
+  static unsigned long lastMillis = 0;
+  unsigned long currentMillis = millis();
+
+  // To avoid printing too frequently, consider using a time threshold
+  if (currentMillis - lastMillis >= 100) {
+    // Read and print the value from the zero-crossing pin
+    int zeroCrossingValue = digitalRead(zeroCrossingPin);
+    Serial.print("Zero Crossing Value: ");
+    Serial.println(zeroCrossingValue);
+
+    // Update the lastMillis value
+    lastMillis = currentMillis;
+  }
+}
